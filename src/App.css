@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-display: flex;
+/* display: flex; */
 align-items: center;
 min-height: 100vh;
 justify-content: center;
@@ -14,4 +14,8 @@ button{
   border-radius: .2rem;
   border: none;
   background-color:lightgray;
+}
+
+.App img {
+  width: 25%
 }
