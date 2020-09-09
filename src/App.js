@@ -59,6 +59,10 @@ const handleOnChange = (e) => {
 console.log(e.target.name, e.target.value)
 }
 
+const handleBlur = (e) => {
+  console.log(e.target.name, e.target.value)
+  }
+
   const { isSignedIn, name, email, photoURL } = user;
 
   return (
@@ -80,8 +84,8 @@ console.log(e.target.name, e.target.value)
 
       <h1>Our Athentication</h1>
       <form action="" onSubmit={handleSubmit}>
-        <input onChange={handleOnChange} type="text" name="email" placeholder="Your email addess" required></input><br />
-        <input onChange={handleOnChange} type="password" name="password" placeholder="Your password" required></input><br />
+        <input onBlur={handleBlur} type="email" name="email" placeholder="Your email addess" required></input><br />
+        <input onBlur={handleBlur} type="password" name="password" placeholder="Your password" required></input><br />
         <button type="submit">Submit</button>
       </form>
 
