@@ -16,6 +16,7 @@ function App() {
   });
 
   const provider = new firebase.auth.GoogleAuthProvider();
+
   const handleSignIn = () => {
     firebase.auth().signInWithPopup(provider)
       .then(res => {
@@ -50,6 +51,14 @@ function App() {
       })
   }
 
+const handleSubmit = () => {
+  // .....
+}
+
+const handleOnChange = (e) => {
+console.log(e.target.name, e.target.value)
+}
+
   const { isSignedIn, name, email, photoURL } = user;
 
   return (
@@ -67,6 +76,17 @@ function App() {
           <p>You have signed in successfully.</p>
           <p>Your email: {email}</p>
         </div>
+      }
+
+      <h1>Our Athentication</h1>
+      <form action="" onSubmit={handleSubmit}>
+        <input onChange={handleOnChange} type="text" name="email" placeholder="Your email addess" required></input><br />
+        <input onChange={handleOnChange} type="password" name="password" placeholder="Your password" required></input><br />
+        <button type="submit">Submit</button>
+      </form>
+
+      {
+
       }
     </div>
   );
