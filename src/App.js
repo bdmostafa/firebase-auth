@@ -55,12 +55,23 @@ const handleSubmit = () => {
   // .....
 }
 
-const handleOnChange = (e) => {
-console.log(e.target.name, e.target.value)
-}
+// const handleOnChange = (e) => {
+// console.log(e.target.name, e.target.value);
+// }
 
 const handleBlur = (e) => {
-  console.log(e.target.name, e.target.value)
+  console.log(e.target.name, e.target.value);
+  if (e.target.name === 'email') {
+// const isEmailValid = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(e.target.value)
+const isEmailValid = /\S+@\S+\.\S+/.test(e.target.value)
+console.log(isEmailValid)
+  }
+  if (e.target.name === 'password') {
+    const isPasswordValid = e.target.value.length > 6
+    const hasNumber = /\d{1}/.test(e.target.value);
+    console.log(isPasswordValid && hasNumber)
+  }
+  
   }
 
   const { isSignedIn, name, email, photoURL } = user;
@@ -84,7 +95,7 @@ const handleBlur = (e) => {
 
       <h1>Our Athentication</h1>
       <form action="" onSubmit={handleSubmit}>
-        <input onBlur={handleBlur} type="email" name="email" placeholder="Your email addess" required></input><br />
+        <input onBlur={handleBlur} type="text" name="email" placeholder="Your email addess" required></input><br />
         <input onBlur={handleBlur} type="password" name="password" placeholder="Your password" required></input><br />
         <button type="submit">Submit</button>
       </form>
