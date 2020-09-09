@@ -12,6 +12,7 @@ function App() {
     isSignedIn: false,
     name: '',
     email: '',
+    password: '',
     photoURL: ''
   });
 
@@ -51,27 +52,37 @@ function App() {
       })
   }
 
-const handleSubmit = () => {
-  // .....
-}
-
-// const handleOnChange = (e) => {
-// console.log(e.target.name, e.target.value);
-// }
-
-const handleBlur = (e) => {
-  console.log(e.target.name, e.target.value);
-  if (e.target.name === 'email') {
-// const isEmailValid = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(e.target.value)
-const isEmailValid = /\S+@\S+\.\S+/.test(e.target.value)
-console.log(isEmailValid)
+  const handleSubmit = () => {
+    // .....
   }
-  if (e.target.name === 'password') {
-    const isPasswordValid = e.target.value.length > 6
-    const hasNumber = /\d{1}/.test(e.target.value);
-    console.log(isPasswordValid && hasNumber)
-  }
-  
+
+  // const handleOnChange = (e) => {
+  // console.log(e.target.name, e.target.value);
+  // }
+
+  const handleBlur = (e) => {
+    // debugger;
+    let isFormValid = true;
+
+    if (e.target.name === 'email') {
+      // isFormValid = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(e.target.value)
+      isFormValid = /\S+@\S+\.\S+/.test(e.target.value)
+      console.log(isFormValid)
+    }
+
+    if (e.target.name === 'password') {
+      const isPasswordValid = e.target.value.length > 6
+      const hasNumber = /\d{1}/.test(e.target.value);
+      isFormValid = isPasswordValid && hasNumber;
+    }
+
+    // Update user state
+    if (isFormValid) {
+      const newUserInfo = { ...user }
+      newUserInfo[e.target.name] = e.target.value;
+      setUser(newUserInfo)
+    }
+
   }
 
   const { isSignedIn, name, email, photoURL } = user;
@@ -95,9 +106,13 @@ console.log(isEmailValid)
 
       <h1>Our Athentication</h1>
       <form action="" onSubmit={handleSubmit}>
+      <input onBlur={handleBlur} type="text" name="name" placeholder="Your name" required></input><br />
         <input onBlur={handleBlur} type="text" name="email" placeholder="Your email addess" required></input><br />
         <input onBlur={handleBlur} type="password" name="password" placeholder="Your password" required></input><br />
         <button type="submit">Submit</button>
+        <p>Name: {user.name} </p>
+        <p>Email: {user.email}</p>
+        <p>Pass: {user.password} </p>
       </form>
 
       {
