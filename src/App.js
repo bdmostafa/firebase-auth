@@ -13,7 +13,9 @@ function App() {
     name: '',
     email: '',
     password: '',
-    photoURL: ''
+    photoURL: '',
+    error: '',
+    success: ''
   });
 
   const provider = new firebase.auth.GoogleAuthProvider();
@@ -52,8 +54,27 @@ function App() {
       })
   }
 
-  const handleSubmit = () => {
-    // .....
+  const handleSubmit = (e) => {
+    // console.log(user.email, user.password);
+    if(user.email && user.password){
+      firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
+      .then(res => {
+        // console.log(res);
+        const newUserInfo = {...user}
+        newUserInfo.error = '';
+        newUserInfo.success = 'Account created successfully.'
+        setUser(newUserInfo);
+      })
+      .catch(error => {
+        // Handle Errors here.
+        // console.log(errorCode, errorMessage);
+        const newUserInfo = {...user}
+        newUserInfo.error = error.message;
+        newUserInfo.success = '';
+        setUser(newUserInfo);
+      });
+    }
+    e.preventDefault();
   }
 
   // const handleOnChange = (e) => {
@@ -62,22 +83,22 @@ function App() {
 
   const handleBlur = (e) => {
     // debugger;
-    let isFormValid = true;
+    let isFieldValid = true;
 
     if (e.target.name === 'email') {
-      // isFormValid = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(e.target.value)
-      isFormValid = /\S+@\S+\.\S+/.test(e.target.value)
-      console.log(isFormValid)
+      // isFieldValid = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(e.target.value)
+      isFieldValid = /\S+@\S+\.\S+/.test(e.target.value)
+      // console.log(isFieldValid);
     }
 
     if (e.target.name === 'password') {
       const isPasswordValid = e.target.value.length > 6
       const hasNumber = /\d{1}/.test(e.target.value);
-      isFormValid = isPasswordValid && hasNumber;
+      isFieldValid = isPasswordValid && hasNumber;
     }
 
     // Update user state
-    if (isFormValid) {
+    if (isFieldValid) {
       const newUserInfo = { ...user }
       newUserInfo[e.target.name] = e.target.value;
       setUser(newUserInfo)
@@ -106,13 +127,15 @@ function App() {
 
       <h1>Our Athentication</h1>
       <form action="" onSubmit={handleSubmit}>
-      <input onBlur={handleBlur} type="text" name="name" placeholder="Your name" required></input><br />
+      <input onBlur={handleBlur} type="text" name="name" placeholder="Your name"></input><br />
         <input onBlur={handleBlur} type="text" name="email" placeholder="Your email addess" required></input><br />
         <input onBlur={handleBlur} type="password" name="password" placeholder="Your password" required></input><br />
         <button type="submit">Submit</button>
-        <p>Name: {user.name} </p>
+        {/* <p>Name: {user.name} </p>
         <p>Email: {user.email}</p>
-        <p>Pass: {user.password} </p>
+        <p>Pass: {user.password} </p> */}
+        <p style={{color: 'red'}}> {user.error} </p>
+        <p style={{color: 'green'}}> {user.success} </p>
       </form>
 
       {
