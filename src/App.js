@@ -24,23 +24,23 @@ function App() {
 
   const handleFBSignIn = () => {
     firebase.auth().signInWithPopup(FBProvider)
-    .then(res => {
-      // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-      var token = res.credential.accessToken;
-      // The signed-in user info.
-      var user = res.user;
-      // ...
-    })
-    .catch(err => {
-      // Handle Errors here.
-      var errorCode = err.code;
-      var errMessage = err.message;
-      // The email of the user's account used.
-      var email = err.email;
-      // The firebase.auth.AuthCredential type that was used.
-      var credential = err.credential;
-      // ...
-    });
+      .then(res => {
+        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+        var token = res.credential.accessToken;
+        // The signed-in user info.
+        var user = res.user;
+        // ...
+      })
+      .catch(err => {
+        // Handle Errors here.
+        var errorCode = err.code;
+        var errMessage = err.message;
+        // The email of the user's account used.
+        var email = err.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = err.credential;
+        // ...
+      });
   }
 
   const handleSignIn = () => {
@@ -88,6 +88,7 @@ function App() {
           newUserInfo.error = '';
           newUserInfo.success = true;
           setUser(newUserInfo);
+          verifyEmail();
           updateUserName(user.name);
         })
         .catch(error => {
@@ -99,21 +100,21 @@ function App() {
     }
 
     // For old users
-    if (!newUser && user.email && user.password){
+    if (!newUser && user.email && user.password) {
       firebase.auth().signInWithEmailAndPassword(user.email, user.password)
-      .then( res => {
-        const newUserInfo = { ...user }
+        .then(res => {
+          const newUserInfo = { ...user }
           newUserInfo.error = '';
           newUserInfo.success = true;
           setUser(newUserInfo);
           console.log('sign in user info', res.user)
-      })
-      .catch(function(error) {
-        const newUserInfo = { ...user }
+        })
+        .catch(function (error) {
+          const newUserInfo = { ...user }
           newUserInfo.error = error.message;
           newUserInfo.success = false;
           setUser(newUserInfo);
-      });
+        });
     }
 
 
@@ -162,6 +163,25 @@ function App() {
     });
   }
 
+  const verifyEmail = () => {
+    var user = firebase.auth().currentUser;
+
+    user.sendEmailVerification().then(function () {
+      // Email sent.
+    }).catch(function (error) {
+      // An error happened.
+    });
+  }
+
+  const resetPassword = email => {
+    let auth = firebase.auth();
+
+    auth.sendPasswordResetEmail(email).then(function () {
+      // Email sent.
+    }).catch(function (error) {
+      // An error happened.
+    });
+  }
   const { isSignedIn, name, email, photoURL } = user;
 
   return (
@@ -195,6 +215,7 @@ function App() {
         <input onBlur={handleBlur} type="text" name="email" placeholder="Your email addess" required></input><br />
         <input onBlur={handleBlur} type="password" name="password" placeholder="Your password" required></input><br />
         <input type="submit" value={newUser ? 'Sign Up' : 'Sign In'} />
+        <button onClick={() => resetPassword(user.email)}>Forget or Reset Password</button>
         {/* <p>Name: {user.name} </p>
         <p>Email: {user.email}</p>
         <p>Pass: {user.password} </p> */}
